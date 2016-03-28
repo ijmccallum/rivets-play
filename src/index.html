@@ -14,7 +14,6 @@
 	<div id="main">
 		<div class="js-product-list">
 			<div rv-each-product="state.productList">
-				hi
 				<h1>{product.title}</h1>
 				<h2>{product.type}</h2>
 				<h3>{product.price}</h3>
@@ -48,14 +47,15 @@
 			};
 		})();
 
-		/* Public state variable for rivets to bind to. */
+		/* Public state variable for rivets to bind to. 
+		 * needs placeholder data or binding wont work... ?
+		 */
 		var publicState = {
 			productList: []
 		}; 
 
-		/* adds new product to array, updates publicState.productList */
+		/* Keeps a private state object. Once updates are finished - the public state object is updated */
 		var stateManager = (function(){
-			/*  Private state variable, seems rivets won't bind to the getState function. */
 			var state = {
 				productList: []
 			};
@@ -82,7 +82,6 @@
 			}
 		})();
 
-		stateManager.addProduct();
 		stateManager.addProduct();
 
 		rivets.configure({
