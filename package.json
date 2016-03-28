@@ -1,0 +1,19 @@
+{
+  "name": "repo",
+  "version": "1.0.0",
+  "description": "Playing with Rivets",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ijmccallum/rivets-play.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ijmccallum/rivets-play/issues"
+  },
+  "homepage": "https://github.com/ijmccallum/rivets-play#readme"
+}

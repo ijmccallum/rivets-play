@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Rivets test</title>
+</head>
+<body>
+
+	<button class="js-addProduct">Add product</button>
+	<button class="js-removeProduct">Remove product</button>
+
+	<hr>
+
+	<div id="main">
+		<div class="js-product-list">
+			<div rv-each-product="state.productList">
+				hi
+				<h1>{product.title}</h1>
+				<h2>{product.type}</h2>
+				<h3>{product.price}</h3>
+				<button>Remove Product: todo, add index</button>
+			</div>
+		</div>
+	</div>
+	
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="../node_modules/rivets/dist/rivets.bundled.min.js"></script>
+
+	<script>
+		/* Fake back end. Returns random product info */
+		var sitecore = (function(){
+
+			function getProduct() {
+				var randomData = {},
+					randomNum = Math.floor((Math.random() * 10) + 1);
+				randomData.title = "Product: " + randomNum;
+				randomData.type = 'Toilet';
+				randomData.price = randomNum * 10;
+				randomData.meta = {};
+				randomData.meta.gpf = randomNum/2;
+
+				return randomData;
+			}
+
+			return {
+				getProduct : getProduct,
+			};
+		})();
+
+		/* Public state variable for rivets to bind to. */
+		var publicState = {
+			productList: []
+		}; 
+
+		/* adds new product to array, updates publicState.productList */
+		var stateManager = (function(){
+			/*  Private state variable, seems rivets won't bind to the getState function. */
+			var state = {
+				productList: []
+			};
+
+			function addProduct(){
+				state.productList.push(sitecore.getProduct());
+				console.log(state.productList);
+				syncStates();
+			}
+
+			function removeProduct(index){
+				console.log('todo');
+			}
+
+			function syncStates(){
+				publicState = state;
+			}
+
+			return {
+				getState: state,
+				addProduct: addProduct,
+				removeProduct: removeProduct,
+				syncStates: syncStates
+			}
+		})();
+
+		stateManager.addProduct();
+		stateManager.addProduct();
+
+		rivets.configure({
+			prefix: 'rv',
+			preloadData: true,
+			rootInterface: '.',
+			templateDelimiters: ['{', '}'],
+			handler: function(target, event, binding) {
+				console.log('hu');
+				this.call(target, event, binding.view.models);
+			}
+		});
+
+
+		//Bind main wrapper to main state. elements will use 'state' as named here to bind to it's attributes
+		var main = document.getElementById('main');
+		rivets.bind(main, {state: publicState}); //this only works on init... do we call a render somewhere?
+
+		//make the button do the button thing
+		document.getElementsByClassName('js-addProduct')[0].addEventListener('click', stateManager.addProduct);
+
+	</script>
+</body>
+</html>
